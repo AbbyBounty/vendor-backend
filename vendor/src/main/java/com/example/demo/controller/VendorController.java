@@ -23,6 +23,7 @@ import com.example.demo.model.Mechanic;
 import com.example.demo.model.Offer;
 import com.example.demo.model.Order;
 import com.example.demo.model.Service_Taken_Vendor;
+import com.example.demo.model.Vendor;
 import com.example.demo.repository.FeedbackRepository;
 import com.example.demo.repository.MechanicRepository;
 import com.example.demo.repository.OfferRepository;
@@ -43,7 +44,9 @@ public class VendorController {
 
 	@Autowired
 	private OfferRepository offerRepository;
-
+	
+	@Autowired
+	private VendorRepository vendorRepository;
 //	@Autowired
 //	private OrderRepository orderRepository;
 	
@@ -57,6 +60,7 @@ public class VendorController {
 	// -----------------------------------------------------------------------------------------
 	@GetMapping("/services")
 	public ResponseEntity<List<Service_Taken_Vendor>> getServices() {
+		
 		return new ResponseEntity<>(serviceRepository.findAll(), HttpStatus.OK);
 	}
 
@@ -163,9 +167,13 @@ public class VendorController {
 	}
 	
 	// -----------------------------------------------------------------------------------------
-		// ---------------------------- PROFILE
+		// ---------------------------- REGISTRATION
 		// ----------------------------------------------
 		// -----------------------------------------------------------------------------------------
+	@PostMapping("/register")
+	public ResponseEntity<Vendor> register(@RequestBody Vendor vendor) {
 
-
+		return new ResponseEntity<>(vendorRepository.save(vendor), HttpStatus.OK);
+	}
+	
 }
