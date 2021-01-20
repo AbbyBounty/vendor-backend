@@ -8,6 +8,7 @@ import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import com.example.demo.model.Mechanic;
 import com.example.demo.model.Offer;
 import com.example.demo.model.Order;
 import com.example.demo.model.Service_Taken_Vendor;
+import com.example.demo.model.Vehicle;
 import com.example.demo.model.Vendor;
 import com.example.demo.repository.FeedbackRepository;
 import com.example.demo.repository.MechanicRepository;
@@ -111,6 +113,15 @@ public class VendorController {
 		return new ResponseEntity<>(updatedService, HttpStatus.OK);
 
 	}
+	
+	@DeleteMapping("/services/{id}")
+	public ResponseEntity<Service_Taken_Vendor> deleteService(@PathVariable int id) {
+		Service_Taken_Vendor service = serviceRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
+		serviceRepository.delete(service);
+		 
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
 
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- MECHANIC
@@ -142,6 +153,17 @@ public class VendorController {
 
 	}
 
+	
+	@DeleteMapping("/mechanic/{id}")
+	public ResponseEntity<Mechanic> deleteMechanic(@PathVariable int id) {
+		Mechanic mechanic = mechanicRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
+		mechanicRepository.delete(mechanic);
+		 
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
+	
+	
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- OFFERS
 	// ----------------------------------------------
@@ -173,6 +195,16 @@ public class VendorController {
 
 	}
 
+	
+	@DeleteMapping("/offer/{id}")
+	public ResponseEntity<Offer> deleteOffer(@PathVariable int id) {
+		Offer offer = offerRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
+		offerRepository.delete(offer);
+		 
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
+	
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- ORDERS
 	// ----------------------------------------------
