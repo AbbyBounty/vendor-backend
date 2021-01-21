@@ -169,6 +169,12 @@ public class VendorController {
 		return new ResponseEntity<>(updatedMechanic, HttpStatus.OK);
 
 	}
+	
+	@GetMapping("/mechanicByUserid/{id}")
+	public ResponseEntity<Object> getVehicleByUserId(@PathVariable int id) {
+		List<Mechanic> mechanics=mechanicRepository.findMechanicByuserId(id);
+		return new ResponseEntity<>(mechanics.isEmpty()? null: mechanics, HttpStatus.OK);
+	}
 
 	@DeleteMapping("/mechanic/{id}")
 	public ResponseEntity<Mechanic> deleteMechanic(@PathVariable int id) {
@@ -195,6 +201,12 @@ public class VendorController {
 		return new ResponseEntity<>(offerRepository.save(offer), HttpStatus.OK);
 	}
 
+	@GetMapping("/offerByUserid/{id}")
+	public ResponseEntity<Object> getOfferByUserId(@PathVariable int id) {
+		List<Offer> offers=offerRepository.findOfferByUserId(id);
+		return new ResponseEntity<>(offers.isEmpty()? null: offers, HttpStatus.OK);
+	}
+	
 	@PutMapping("/offer/{id}")
 	public ResponseEntity<Offer> updateOffer(@PathVariable int id, @RequestBody Offer offer) {
 		Offer offer1 = offerRepository.findById(id)
