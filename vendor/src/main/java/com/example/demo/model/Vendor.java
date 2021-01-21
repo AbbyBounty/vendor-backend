@@ -32,6 +32,8 @@ public class Vendor {
 			List<Service_Taken_Vendor> ven_services = new ArrayList<>(); // Services Taken from Master Table and Provided to Users 
 			
 			
+			
+
 
 			public Vendor() {
 				System.out.println("In Vendor Default Contrusctor Server Side");

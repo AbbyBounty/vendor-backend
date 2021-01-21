@@ -24,6 +24,7 @@ import com.example.demo.model.Mechanic;
 import com.example.demo.model.Offer;
 import com.example.demo.model.Order;
 import com.example.demo.model.Service_Taken_Vendor;
+import com.example.demo.model.User;
 import com.example.demo.model.Vehicle;
 import com.example.demo.model.Vendor;
 import com.example.demo.repository.FeedbackRepository;
@@ -33,7 +34,7 @@ import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ServiceRepository;
 import com.example.demo.repository.VendorRepository;
 
-@CrossOrigin
+@CrossOrigin(origins ="http://localhost:4200/*")
 @RestController
 @RequestMapping("/vendor")
 public class VendorController {
@@ -51,11 +52,28 @@ public class VendorController {
 	private VendorRepository vendorProfileRepository;
 //	@Autowired
 //	private OrderRepository orderRepository;
-	
-	
+
 	@Autowired
 	private FeedbackRepository feedbackRepository;
-	
+
+	// -----------------------------------------------------------------------------------------
+	// ---------------------------- Auth
+	// ----------------------------------------------
+	// -----------------------------------------------------------------------------------------
+
+	@PostMapping("/auth")
+	public ResponseEntity<Vendor> authenticate(@RequestBody Vendor vendor) {
+		System.out.println(vendor.getVen_email()+vendor.getVen_password());
+		List<Vendor> result = vendorProfileRepository.findByVen_emailAndVen_password(vendor.getVen_email(), vendor.getVen_password());
+		
+		return new ResponseEntity<>(result.isEmpty() ? null : result.get(0), HttpStatus.OK);
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<Vendor> register(@RequestBody Vendor vendor) {
+		return new ResponseEntity<>(vendorProfileRepository.save(vendor), HttpStatus.OK);
+	}
+
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- Vendor
 	// ----------------------------------------------
@@ -65,7 +83,7 @@ public class VendorController {
 	public ResponseEntity<Object> getVendor(@PathVariable int id) {
 		return new ResponseEntity<Object>(vendorProfileRepository.findById(id), HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/profile/{id}")
 	public ResponseEntity<Vendor> updateVendor(@PathVariable int id, @RequestBody Vendor vendor) {
 		Vendor vendor1 = vendorProfileRepository.findById(id)
@@ -84,7 +102,6 @@ public class VendorController {
 
 	}
 
-	
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- SERVICES
 	// ----------------------------------------------
@@ -113,14 +130,14 @@ public class VendorController {
 		return new ResponseEntity<>(updatedService, HttpStatus.OK);
 
 	}
-	
+
 	@DeleteMapping("/services/{id}")
 	public ResponseEntity<Service_Taken_Vendor> deleteService(@PathVariable int id) {
 		Service_Taken_Vendor service = serviceRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
 		serviceRepository.delete(service);
-		 
-		return new ResponseEntity<>( HttpStatus.OK);
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	// -----------------------------------------------------------------------------------------
@@ -141,7 +158,7 @@ public class VendorController {
 
 	@PutMapping("/mechanic/{id}")
 	public ResponseEntity<Mechanic> updateMechanic(@PathVariable int id, @RequestBody Mechanic mechanic) {
-		Mechanic mechanic1 = mechanicRepository.findById( id)
+		Mechanic mechanic1 = mechanicRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
 		mechanic1.setMech_first_name(mechanic.getMech_first_name());
 		mechanic1.setMech_last_name(mechanic.getMech_last_name());
@@ -153,17 +170,15 @@ public class VendorController {
 
 	}
 
-	
 	@DeleteMapping("/mechanic/{id}")
 	public ResponseEntity<Mechanic> deleteMechanic(@PathVariable int id) {
 		Mechanic mechanic = mechanicRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
 		mechanicRepository.delete(mechanic);
-		 
-		return new ResponseEntity<>( HttpStatus.OK);
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
+
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- OFFERS
 	// ----------------------------------------------
@@ -182,7 +197,7 @@ public class VendorController {
 
 	@PutMapping("/offer/{id}")
 	public ResponseEntity<Offer> updateOffer(@PathVariable int id, @RequestBody Offer offer) {
-		Offer offer1 = offerRepository.findById( id)
+		Offer offer1 = offerRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
 		offer1.setOfr_code(offer.getOfr_code());
 		offer1.setOfr_discount(offer.getOfr_discount());
@@ -195,16 +210,15 @@ public class VendorController {
 
 	}
 
-	
 	@DeleteMapping("/offer/{id}")
 	public ResponseEntity<Offer> deleteOffer(@PathVariable int id) {
 		Offer offer = offerRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
 		offerRepository.delete(offer);
-		 
-		return new ResponseEntity<>( HttpStatus.OK);
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- ORDERS
 	// ----------------------------------------------
@@ -222,14 +236,13 @@ public class VendorController {
 
 	@GetMapping("/feedback/{id}")
 	public ResponseEntity<Object> getFeedbackById(@PathVariable int id) {
-		
+
 		return new ResponseEntity<Object>(feedbackRepository.findById(id), HttpStatus.OK);
 	}
-	
-	// -----------------------------------------------------------------------------------------
-		// ---------------------------- PROFILE
-		// ----------------------------------------------
-		// -----------------------------------------------------------------------------------------
 
+	// -----------------------------------------------------------------------------------------
+	// ---------------------------- PROFILE
+	// ----------------------------------------------
+	// -----------------------------------------------------------------------------------------
 
 }
