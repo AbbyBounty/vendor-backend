@@ -103,42 +103,54 @@ public class VendorController {
 	}
 
 	// -----------------------------------------------------------------------------------------
-	// ---------------------------- SERVICES
-	// ----------------------------------------------
-	// -----------------------------------------------------------------------------------------
-	@GetMapping("/services")
-	public ResponseEntity<List<Service_Taken_Vendor>> getServices() {
-		return new ResponseEntity<>(serviceRepository.findAll(), HttpStatus.OK);
-	}
+		// ---------------------------- SERVICES
+		// ----------------------------------------------
+		// -----------------------------------------------------------------------------------------
+//		@GetMapping("/services/{id}")
+//		public ResponseEntity<List<Service_Taken_Vendor>> getServices() {
+//			return new ResponseEntity<>(serviceRepository.findAll(), HttpStatus.OK);
+//		}
 
-	@PostMapping("/services/create/")
-	public ResponseEntity<Service_Taken_Vendor> createService(@RequestBody Service_Taken_Vendor service_Taken_Vendor) {
+		@PostMapping("/services/create")
+		public ResponseEntity<Service_Taken_Vendor> createService(@RequestBody Service_Taken_Vendor service_Taken_Vendor) {
 
-		return new ResponseEntity<>(serviceRepository.save(service_Taken_Vendor), HttpStatus.OK);
-	}
+			return new ResponseEntity<>(serviceRepository.save(service_Taken_Vendor), HttpStatus.OK);
+		}
 
-	@PutMapping("/services/{id}")
-	public ResponseEntity<Service_Taken_Vendor> updateService(@PathVariable int id,
-			@RequestBody Service_Taken_Vendor service_Taken_Vendor) {
-		Service_Taken_Vendor service = serviceRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
-		service.setStv_name(service_Taken_Vendor.getStv_name());
-		service.setStv_price(service_Taken_Vendor.getStv_price());
+		@PutMapping("/services/{id}")
+		public ResponseEntity<Service_Taken_Vendor> updateService(@PathVariable int id,
+				@RequestBody Service_Taken_Vendor service_Taken_Vendor) {
+			Service_Taken_Vendor service = serviceRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+			service.setStv_name(service_Taken_Vendor.getStv_name());
+			service.setStv_price(service_Taken_Vendor.getStv_price());
 
-		Service_Taken_Vendor updatedService = serviceRepository.save(service);
+			Service_Taken_Vendor updatedService = serviceRepository.save(service);
 
-		return new ResponseEntity<>(updatedService, HttpStatus.OK);
+			return new ResponseEntity<>(updatedService, HttpStatus.OK);
+		}	
+			
+			@GetMapping("/services/{id}")
+			public ResponseEntity<Object> getServices(@PathVariable int id) {
+				return new ResponseEntity<Object>(serviceRepository.findById(id), HttpStatus.OK);
+			}
+			
+			@GetMapping("/servicesByUserid/{id}")
+			public ResponseEntity<Object> getServicesByUserid(@PathVariable int id) {
+				List<Service_Taken_Vendor> service_Taken_Vendor=serviceRepository.findservicesByuserId(id);
+				return new ResponseEntity<>(service_Taken_Vendor.isEmpty()? null: service_Taken_Vendor, HttpStatus.OK);
+			
 
-	}
+		}
 
-	@DeleteMapping("/services/{id}")
-	public ResponseEntity<Service_Taken_Vendor> deleteService(@PathVariable int id) {
-		Service_Taken_Vendor service = serviceRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
-		serviceRepository.delete(service);
-
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+			@DeleteMapping("/services/{id}")
+			public ResponseEntity<Service_Taken_Vendor> deleteService(@PathVariable int id) {
+				Service_Taken_Vendor service1 = serviceRepository.findById(id)
+						.orElseThrow(() -> new ResourceNotFoundException("Service not exist with id :" + id));
+				serviceRepository.delete(service1);
+				 
+				return new ResponseEntity<>( HttpStatus.OK);
+			}
 
 	// -----------------------------------------------------------------------------------------
 	// ---------------------------- MECHANIC
