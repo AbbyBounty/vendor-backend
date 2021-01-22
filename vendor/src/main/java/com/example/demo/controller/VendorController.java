@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,15 +102,33 @@ public class VendorController {
 		return new ResponseEntity<>(updateVendor, HttpStatus.OK);
 
 	}
+	
+	
+		// -----------------------------------------------------------------------------------------
+		// ---------------------------- SHOPS
+		// ----------------------------------------------
+		// -----------------------------------------------------------------------------------------
+
+	@GetMapping("/shops")
+	public ResponseEntity<Object> getAllShops() {
+//		
+//		List<Vendor> vendor = vendorProfileRepository.findAll();
+//		List<String> shops=new ArrayList<String>();
+//		
+//		for (Vendor vendor2 : vendor) {
+//			 shops.add(vendor2.getVen_shop_name());
+//		}
+//		
+//		return new ResponseEntity<List<String>>(shops, HttpStatus.OK);
+		return new ResponseEntity<Object>(vendorProfileRepository.findAll(), HttpStatus.OK);
+	}	
+	
+	
 
 	// -----------------------------------------------------------------------------------------
 		// ---------------------------- SERVICES
 		// ----------------------------------------------
 		// -----------------------------------------------------------------------------------------
-//		@GetMapping("/services/{id}")
-//		public ResponseEntity<List<Service_Taken_Vendor>> getServices() {
-//			return new ResponseEntity<>(serviceRepository.findAll(), HttpStatus.OK);
-//		}
 
 		@PostMapping("/services/create")
 		public ResponseEntity<Service_Taken_Vendor> createService(@RequestBody Service_Taken_Vendor service_Taken_Vendor) {
